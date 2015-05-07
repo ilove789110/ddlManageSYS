@@ -1,61 +1,3 @@
-apply plugin: 'java'
-apply plugin: 'groovy'
-apply plugin: 'war'
-//apply plugin: 'sonar-runner'
-
-version = '0.1'
-
-
-/*
-sonarRunner {
-    sonarProperties {
-        property "sonar.host.url", "http://localhost:9000"
-        property "sonar.jdbc.url", "jdbc:mysql://localhost:3306/sonar?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true"
-        property "sonar.jdbc.driverClassName", "com.mysql.jdbc.Driver"
-        property "sonar.jdbc.username", "root"
-        property "sonar.jdbc.password", ""
-    }
-
-}
-*/
-
-repositories {
-    mavenCentral()
-}
-
-
-dependencies {
-
-    //test source编译依赖
-    testCompile group: 'junit', name: 'junit', version: '4.11'
-    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
-    testCompile 'org.spockframework:spock-unitils:0.7-groovy-2.0'
-    testCompile 'org.spockframework:spock-tapestry:0.7-groovy-2.0'
-    testCompile 'org.spockframework:spock-spring:0.7-groovy-2.0'
-    testCompile 'org.spockframework:spock-maven:0.7-groovy-2.0'
-    testCompile 'org.spockframework:spock-guice:0.7-groovy-2.0'
-
-
-    testCompile group: 'org.testng', name: 'testng', version: '6.7'
-    testCompile "org.mockito:mockito-all:1.9.5"
-    //source编译依赖
-    compile 'org.codehaus.groovy:groovy-all:2.3.6'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.0.2'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.0.2'
-    compile 'org.springframework:spring-context:4.1.0.RELEASE'
-    compile 'org.mybatis:mybatis:3.2.7'
-    compile 'org.mybatis:mybatis-spring:1.2.2'
-    compile 'org.apache.httpcomponents:httpclient-win:4.4-alpha1'
-    compile 'org.apache.httpcomponents:httpclient-osgi:4.4-alpha1'
-    compile 'org.apache.httpcomponents:httpclient:4.4-alpha1'
-    compile 'org.apache.httpcomponents:httpclient-cache:4.4-alpha1'
-
-    providedCompile group: 'javax',name:'javaee-api',version:'7.0'
-}
-
-
-//sonar staffs
-
 ext {
     // ajust as you see fit
     sonarProjects = subprojects
@@ -82,9 +24,9 @@ task unpackSonarRunner(type: Copy) {
         properties['sonar.host.url'] = 'http://localhost:9000'
         properties['sonar.jdbc.url'] = 'jdbc:mysql://localhost:3306/sonar?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true'
         properties['sonar.jdbc.driverClassName'] = 'com.mysql.jdbc.Driver'
-        properties['sonar.jdbc.username'] = 'root'
-        properties['sonar.jdbc.password'] =''
-
+        properties['sonar.jdbc.username'] = 'sonar'
+        properties['sonar.jdbc.password'] = 'sonar'
+        
         new File(project.buildDir, 'sonar-runner/sonar-runner-2.4/conf/sonar-runner.properties').withWriter { writer ->
             properties.store(writer, "Sonar Runner Properties")
         }
@@ -92,13 +34,13 @@ task unpackSonarRunner(type: Copy) {
 }
 
 task createSonarProjectProperties() {
-//    outputs.file sonarProjectPropertiesFile
+    //outputs.file sonarProjectPropertiesFile
 }
 
 createSonarProjectProperties << {
     Properties sonarProjectProps = new Properties()
-    sonarProjectProps['sonar.projectKey'] = 'DDL'
-    sonarProjectProps['sonar.projectName'] = 'ddlManageSYS'
+    sonarProjectProps['sonar.projectKey'] = 'com.foo.bar'
+    sonarProjectProps['sonar.projectName'] = 'My Project'
     sonarProjectProps['sonar.projectVersion'] = project.version
     // due to classes in wrong packages
     // sonarProjectProps['sonar.skipPackageDesign'] = 'true'
